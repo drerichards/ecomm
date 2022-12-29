@@ -13,7 +13,16 @@ import {
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  writeBatch,
+  query,
+  getDocs,
+} from "firebase/firestore";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -41,6 +50,37 @@ export const signInWithGooglePopup = () =>
 export const signInWithGoogleRedirect = () =>
   signInWithRedirect(auth, googleProvider);
 export const firebaseDb = getFirestore(firebaseApp);
+
+export const addCollectionAndDocuments = async (
+  collectionKeyName,
+  objectsToAdd
+) => {
+  const collectionRef = collection(firebaseDb, collectionKeyName); // creates collection in db
+  const batch = writeBatch(firebaseDb); // enables read/write methods to db
+
+  objectsToAdd.forEach((object) => {
+    // takes each object and adds it by lowercased title
+    const docRef = doc(collectionRef, object.title.toLowerCase());
+    batch.set(docRef, object);
+  });
+
+  await batch.commit();
+  console.log("objects added");
+};
+
+export const getCollectionAndDocuments = async (collectioKeyName) => {
+  const collectionRef = collection(firebaseDb, "categories"); // gets collection in db
+  const q = query(collectionRef);
+
+  const querySnapshot = await getDocs(q);
+  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+    const { title, items } = docSnapshot.data();
+    acc[title.toLowerCase()] = items;
+    return acc;
+  }, {});
+
+  return categoryMap;
+};
 
 export const createUserDocumentFromAuth = async (
   userAuth,
