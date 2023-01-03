@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { CartContext } from "contexts/CartContext";
-import CheckoutItem from "components/checkout/checkout-item/CheckoutItem";
+import CheckoutItem from "components/auth/checkout-item/CheckoutItem";
 import {
   CheckoutContainer,
   CheckoutHeader,
@@ -11,7 +11,7 @@ import {
 const Checkout = () => {
   const {
     cartItems,
-    totalPrice,
+    cartTotal,
     addItemToCart,
     removeItemFromCart,
     clearItemsFromCart,
@@ -47,7 +47,7 @@ const Checkout = () => {
           />
         );
       })}
-      <PriceTotal>Total: ${totalPrice}</PriceTotal>
+      <PriceTotal>Total: ${cartTotal}</PriceTotal>
     </CheckoutContainer>
   );
 };

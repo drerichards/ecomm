@@ -1,25 +1,23 @@
 import React from "react";
+import { Provider } from "react-redux";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { CartProvider } from "contexts/CartContext";
-import { CategoriesProvider } from "contexts/CategoriesContext";
-import { UserProvider } from "contexts/UserContext";
+import { store } from "store/store";
 import "./index.scss";
 import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <UserProvider>
-        <CategoriesProvider>
-          <CartProvider>
-            <App />
-          </CartProvider>
-        </CategoriesProvider>
-      </UserProvider>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <CartProvider>
+          <App />
+        </CartProvider>
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
 
